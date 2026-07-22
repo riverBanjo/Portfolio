@@ -1,0 +1,53 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const allProjects = await getCollection("projects");
+const featured = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.year - a.data.year);
+---
+
+<Layout title="River Fisher">
+  <section class="mx-auto max-w-3xl px-6 pt-20 pb-16">
+    <p class="mb-4 font-mono text-sm text-(--color-accent)">Hi, I'm River.</p>
+    <h1 class="mb-6 text-4xl font-medium tracking-tight text-(--color-ink) sm:text-5xl">
+      I build and design things on the web.
+    </h1>
+    <p class="max-w-xl text-lg text-(--color-ink-dim)">
+      Software engineer and designer. This is where I put the projects I'm
+      proud of — replace this paragraph with a couple of sentences about
+      what you actually do.
+    </p>
+    <div class="mt-8 flex gap-4 font-mono text-sm">
+      <a
+        href="/projects"
+        class="rounded-md bg-(--color-accent) px-4 py-2 font-medium text-(--color-bg) transition-opacity hover:opacity-90"
+      >
+        View projects
+      </a>
+      <a
+        href="/contact"
+        class="rounded-md border border-(--color-line) px-4 py-2 text-(--color-ink) transition-colors hover:border-(--color-accent-dim)"
+      >
+        Get in touch
+      </a>
+    </div>
+  </section>
+
+  {
+    featured.length > 0 && (
+      <section class="mx-auto max-w-3xl px-6 pb-24">
+        <h2 class="mb-6 font-mono text-sm text-(--color-ink-dim) uppercase tracking-wide">
+          Featured work
+        </h2>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {featured.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Layout>

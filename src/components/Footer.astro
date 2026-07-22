@@ -1,0 +1,33 @@
+---
+const year = new Date().getFullYear();
+
+const socials = [
+  { href: "https://github.com/", label: "GitHub" },
+  { href: "https://linkedin.com/", label: "LinkedIn" },
+  { href: "mailto:river.bass.fisher@gmail.com", label: "Email" },
+];
+---
+
+<footer class="border-t border-(--color-line)">
+  <div
+    class="mx-auto flex max-w-3xl flex-col gap-4 px-6 py-8 font-mono text-xs text-(--color-ink-dim) sm:flex-row sm:items-center sm:justify-between"
+  >
+    <p>&copy; {year} River Fisher.</p>
+    <ul class="flex gap-5">
+      {
+        socials.map((social) => (
+          <li>
+            <a
+              href={social.href}
+              class="transition-colors hover:text-(--color-accent)"
+              target={social.href.startsWith("http") ? "_blank" : undefined}
+              rel={social.href.startsWith("http") ? "noreferrer" : undefined}
+            >
+              {social.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>

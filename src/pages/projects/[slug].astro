@@ -1,0 +1,97 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { title, summary, tags, year, role, link, repo } = project.data;
+const { Content } = await render(project);
+---
+
+<Layout title={title} description={summary}>
+  <article class="mx-auto max-w-3xl px-6 pt-16 pb-24">
+    <a
+      href="/projects"
+      class="mb-8 inline-block font-mono text-sm text-(--color-ink-dim) transition-colors hover:text-(--color-accent)"
+    >
+      &larr; All projects
+    </a>
+
+    <h1 class="mb-3 text-3xl font-medium tracking-tight text-(--color-ink)">
+      {title}
+    </h1>
+    <p class="mb-6 text-lg text-(--color-ink-dim)">{summary}</p>
+
+    <dl class="mb-8 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs text-(--color-ink-dim)">
+      <div class="flex gap-2">
+        <dt class="text-(--color-ink)">Year</dt>
+        <dd>{year}</dd>
+      </div>
+      {
+        role && (
+          <div class="flex gap-2">
+            <dt class="text-(--color-ink)">Role</dt>
+            <dd>{role}</dd>
+          </div>
+        )
+      }
+      {
+        link && (
+          <div class="flex gap-2">
+            <dt class="text-(--color-ink)">Live</dt>
+            <dd>
+              <a
+                href={link}
+                target="_blank"
+                rel="noreferrer"
+                class="text-(--color-accent) hover:underline"
+              >
+                {new URL(link).hostname}
+              </a>
+            </dd>
+          </div>
+        )
+      }
+      {
+        repo && (
+          <div class="flex gap-2">
+            <dt class="text-(--color-ink)">Code</dt>
+            <dd>
+              <a
+                href={repo}
+                target="_blank"
+                rel="noreferrer"
+                class="text-(--color-accent) hover:underline"
+              >
+                {new URL(repo).hostname}
+              </a>
+            </dd>
+          </div>
+        )
+      }
+    </dl>
+
+    <ul class="mb-10 flex flex-wrap gap-2">
+      {
+        tags.map((tag) => (
+          <li class="rounded-full border border-(--color-line) px-2.5 py-0.5 font-mono text-xs text-(--color-ink-dim)">
+            {tag}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div
+      class="prose prose-invert max-w-none prose-headings:font-medium prose-a:text-(--color-accent)"
+    >
+      <Content />
+    </div>
+  </article>
+</Layout>

@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", monospace;
+
+  --color-bg: #0a0a0c;
+  --color-bg-raised: #131317;
+  --color-ink: #f2f2f0;
+  --color-ink-dim: #9a9aa2;
+  --color-line: #232329;
+  --color-accent: #7dffb3;
+  --color-accent-dim: #4fae7f;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}

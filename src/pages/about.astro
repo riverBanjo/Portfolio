@@ -1,0 +1,44 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const skills = [
+  "TypeScript",
+  "React",
+  "Astro",
+  "Node.js",
+  "Python",
+  "UI Design",
+];
+---
+
+<Layout title="About" description="About River Fisher.">
+  <section class="mx-auto max-w-3xl px-6 pt-16 pb-24">
+    <h1 class="mb-6 text-3xl font-medium tracking-tight text-(--color-ink)">
+      About
+    </h1>
+    <div class="max-w-xl space-y-4 text-(--color-ink-dim)">
+      <p>
+        Replace this with your actual bio — who you are, what you work on,
+        and what kind of problems you like solving. A couple of short
+        paragraphs is plenty.
+      </p>
+      <p>
+        You can also mention your background, how you got into this work,
+        and what you're focused on right now.
+      </p>
+    </div>
+
+    <h2 class="mt-12 mb-4 font-mono text-sm text-(--color-ink-dim) uppercase tracking-wide">
+      Skills
+    </h2>
+    <ul class="flex flex-wrap gap-2">
+      {
+        skills.map((skill) => (
+          <li class="rounded-full border border-(--color-line) px-3 py-1 font-mono text-xs text-(--color-ink-dim)">
+            {skill}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>

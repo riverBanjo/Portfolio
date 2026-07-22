@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const email = "river.bass.fisher@gmail.com";
+
+const links = [
+  { href: "https://github.com/", label: "GitHub" },
+  { href: "https://linkedin.com/", label: "LinkedIn" },
+];
+---
+
+<Layout title="Contact" description="Get in touch with River Fisher.">
+  <section class="mx-auto max-w-3xl px-6 pt-16 pb-24">
+    <h1 class="mb-6 text-3xl font-medium tracking-tight text-(--color-ink)">
+      Contact
+    </h1>
+    <p class="mb-8 max-w-xl text-(--color-ink-dim)">
+      The best way to reach me is email. I'm also around on the links below.
+    </p>
+
+    <a
+      href={`mailto:${email}`}
+      class="mb-8 inline-block rounded-md bg-(--color-accent) px-5 py-3 font-mono text-sm font-medium text-(--color-bg) transition-opacity hover:opacity-90"
+    >
+      {email}
+    </a>
+
+    <ul class="flex gap-6 font-mono text-sm">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              class="text-(--color-ink-dim) transition-colors hover:text-(--color-accent)"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>

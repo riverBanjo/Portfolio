@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, summary, tags, year } = project.data;
+---
+
+<a
+  href={`/projects/${project.id}`}
+  class="group block rounded-lg border border-(--color-line) bg-(--color-bg-raised) p-6 transition-colors hover:border-(--color-accent-dim)"
+>
+  <div class="mb-2 flex items-baseline justify-between gap-4">
+    <h3 class="text-lg font-medium text-(--color-ink) group-hover:text-(--color-accent)">
+      {title}
+    </h3>
+    <span class="shrink-0 font-mono text-xs text-(--color-ink-dim)">{year}</span>
+  </div>
+  <p class="mb-4 text-sm text-(--color-ink-dim)">{summary}</p>
+  <ul class="flex flex-wrap gap-2">
+    {
+      tags.map((tag) => (
+        <li class="rounded-full border border-(--color-line) px-2.5 py-0.5 font-mono text-xs text-(--color-ink-dim)">
+          {tag}
+        </li>
+      ))
+    }
+  </ul>
+</a>
