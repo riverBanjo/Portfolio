@@ -1,8 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const email = "river.bass.fisher@gmail.com";
-
 const links = [
   { href: "https://github.com/", label: "GitHub" },
   { href: "https://linkedin.com/", label: "LinkedIn" },
@@ -15,15 +13,8 @@ const links = [
       Contact
     </h1>
     <p class="mb-8 max-w-xl text-(--color-ink-dim)">
-      The best way to reach me is email. I'm also around on the links below.
+      The best way to reach me is through the links below.
     </p>
-
-    <a
-      href={`mailto:${email}`}
-      class="mb-8 inline-block rounded-md bg-(--color-accent) px-5 py-3 font-mono text-sm font-medium text-(--color-bg) transition-opacity hover:opacity-90"
-    >
-      {email}
-    </a>
 
     <ul class="flex gap-6 font-mono text-sm">
       {
