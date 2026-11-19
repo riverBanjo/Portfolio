@@ -12,7 +12,7 @@ interface Props {
 
 const {
   title,
-  description = "River Fisher — software engineer and designer.",
+  description = "River Fisher — product engineer. TypeScript, React and Postgres.",
 } = Astro.props;
 
 const pageTitle = title === "River Fisher" ? title : `${title} — River Fisher`;
@@ -27,6 +27,13 @@ const pageTitle = title === "River Fisher" ? title : `${title} — River Fisher`
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="River Fisher" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta name="twitter:card" content="summary" />
   </head>
   <body class="flex min-h-screen flex-col antialiased">
     <Nav />

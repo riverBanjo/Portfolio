@@ -2,34 +2,63 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
+import { sortProjects } from "../lib/projects";
+import { shipped } from "../data/site";
 
-const allProjects = await getCollection("projects");
-const featured = allProjects
-  .filter((p) => p.data.featured)
-  .sort((a, b) => b.data.year - a.data.year);
+const featured = sortProjects(
+  (await getCollection("projects")).filter((p) => p.data.featured),
+);
+const [lead, ...rest] = featured;
+
+const recent = [...shipped].sort((a, b) => b.date.localeCompare(a.date));
+
+const formatDate = (iso: string) =>
+  new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+
+const principles = [
+  {
+    title: "I ask early",
+    body: "On a codebase I didn't start, a ten-minute question beats a day of guessing. I'd rather check what “done” means before I build it than after.",
+  },
+  {
+    title: "I care how it feels",
+    body: "Correct isn't finished. If the map goes read-only, it should say why. If a save fails, you shouldn't lose what you typed.",
+  },
+  {
+    title: "I like being reviewed",
+    body: "Every change on The World Was Young went through review, lint, types, e2e and accessibility checks. Review findings are how I got better fastest.",
+  },
+];
 ---
 
-<Layout title="River Fisher">
+<Layout
+  title="River Fisher"
+  description="River Fisher — product engineer. TypeScript, React and Postgres. Ships real features to real users."
+>
   <section class="mx-auto max-w-3xl px-6 pt-20 pb-16">
     <p class="mb-4 font-mono text-sm text-(--color-accent)">Hi, I'm River.</p>
-    <h1 class="mb-6 text-4xl font-medium tracking-tight text-(--color-ink) sm:text-5xl">
-      I build and design things on the web.
+    <h1 class="mb-6 text-4xl font-medium tracking-tight text-balance text-(--color-ink) sm:text-5xl">
+      I build things people use, and fix them when they break.
     </h1>
     <p class="max-w-xl text-lg text-(--color-ink-dim)">
-      Software engineer and designer. This is where I put the projects I'm
-      proud of — replace this paragraph with a couple of sentences about
-      what you actually do.
+      I'm an engineer early, working across the stack in
+      TypeScript, React and Postgres. Lately I've been building a real-time,
+      collaborative worldbuilding game with a small team. It's live, and
+      players keep finding real bugs.
     </p>
-    <div class="mt-8 flex gap-4 font-mono text-sm">
+    <div class="mt-8 flex flex-wrap gap-4 font-mono text-sm">
       <a
-        href="/projects"
-        class="rounded-md bg-(--color-accent) px-4 py-2 font-medium text-(--color-bg) transition-opacity hover:opacity-90"
+        href="/projects/the-world-was-young-online"
+        class="sparkle group btn-gold gold-border rounded-md px-4 py-2 font-medium"
       >
-        View projects
+        <span class="gold-text-bright">See my best work</span>
       </a>
       <a
         href="/contact"
-        class="rounded-md border border-(--color-line) px-4 py-2 text-(--color-ink) transition-colors hover:border-(--color-accent-dim)"
+        class="group gold-border rounded-md px-4 py-2 text-(--color-ink) hover:shadow-[0_2px_10px_rgb(122_90_20/0.18)]"
       >
         Get in touch
       </a>
@@ -37,17 +66,74 @@ const featured = allProjects
   </section>
 
   {
-    featured.length > 0 && (
-      <section class="mx-auto max-w-3xl px-6 pb-24">
-        <h2 class="mb-6 font-mono text-sm text-(--color-ink-dim) uppercase tracking-wide">
+    lead && (
+      <section class="mx-auto max-w-3xl px-6 pb-20">
+        <h2 class="mb-6 font-mono text-sm tracking-wide text-(--color-ink-dim) uppercase">
           Featured work
         </h2>
         <div class="grid gap-4 sm:grid-cols-2">
-          {featured.map((project) => (
-            <ProjectCard project={project} />
-          ))}
+          <div class="sm:col-span-2">
+            <ProjectCard project={lead} />
+          </div>
+          {rest.map((project) => <ProjectCard project={project} />)}
         </div>
+        <a
+          href="/projects"
+          class="mt-6 inline-block font-mono text-sm text-(--color-ink-dim) transition-colors hover:text-(--color-accent)"
+        >
+          All projects &rarr;
+        </a>
       </section>
     )
   }
+
+  <section class="mx-auto max-w-3xl px-6 pb-20">
+    <h2 class="mb-2 font-mono text-sm tracking-wide text-(--color-ink-dim) uppercase">
+      Recently shipped
+    </h2>
+    <p class="mb-6 text-sm text-(--color-ink-dim)">
+      Straight from my commit history: features, fixes and the small stuff.
+    </p>
+    <ol class="gold-rule-y divide-y divide-(--color-line)">
+      {
+        recent.map((item) => (
+          <li class="grid grid-cols-[4.5rem_1fr] gap-x-4 gap-y-1 py-3 sm:grid-cols-[4.5rem_1fr_auto]">
+            <time datetime={item.date} class="font-mono text-xs leading-6 text-(--color-ink-dim)">
+              {formatDate(item.date)}
+            </time>
+            <span class="text-sm leading-6 text-(--color-ink)">{item.what}</span>
+            <span class="col-start-2 font-mono text-xs leading-6 text-(--color-ink-dim) sm:col-start-3">
+              <span
+                class:list={[
+                  item.kind === "fix" && "text-(--color-gold-deep)",
+                  item.kind === "feature" && "text-(--color-accent)",
+                  item.kind === "polish" && "text-sky-800",
+                ]}
+              >
+                {item.kind}
+              </span>
+              {" · "}
+              {item.project}
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-6 pb-24">
+    <h2 class="mb-6 font-mono text-sm tracking-wide text-(--color-ink-dim) uppercase">
+      How I work
+    </h2>
+    <div class="grid gap-6 sm:grid-cols-3">
+      {
+        principles.map((p) => (
+          <div>
+            <h3 class="mb-2 font-medium text-(--color-ink)">{p.title}</h3>
+            <p class="text-sm text-(--color-ink-dim)">{p.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 </Layout>

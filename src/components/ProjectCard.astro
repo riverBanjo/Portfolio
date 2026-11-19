@@ -6,12 +6,17 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, summary, tags, year } = project.data;
+const { title, summary, tags, year, status, context } = project.data;
+
+// Stable per-card offset so the sparkles on neighbouring cards don't twinkle
+// in unison (derived from the id, so it doesn't change between builds).
+const sparkleDelay = [...project.id].reduce((n, c) => (n * 131 + c.charCodeAt(0)) % 10007, 17) % 53 / 10;
 ---
 
 <a
   href={`/projects/${project.id}`}
-  class="group block rounded-lg border border-(--color-line) bg-(--color-bg-raised) p-6 transition-colors hover:border-(--color-accent-dim)"
+  style={`--sparkle-delay: ${sparkleDelay}s`}
+  class="sparkle group flex flex-col gold-border rounded-lg [--gold-border-bg:var(--color-bg-raised)] p-6 shadow-[0_1px_3px_rgb(74_74_74/0.08)] hover:shadow-[0_4px_14px_rgb(122_90_20/0.18)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-accent)"
 >
   <div class="mb-2 flex items-baseline justify-between gap-4">
     <h3 class="text-lg font-medium text-(--color-ink) group-hover:text-(--color-accent)">
@@ -19,11 +24,24 @@ const { title, summary, tags, year } = project.data;
     </h3>
     <span class="shrink-0 font-mono text-xs text-(--color-ink-dim)">{year}</span>
   </div>
+  {
+    (status || context) && (
+      <p class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-(--color-ink-dim)">
+        {status && (
+          <span class="inline-flex items-center gap-1.5 text-(--color-accent)">
+            <span class="gold-fill size-1.5 rounded-full" aria-hidden="true" />
+            {status}
+          </span>
+        )}
+        {context && <span>{context}</span>}
+      </p>
+    )
+  }
   <p class="mb-4 text-sm text-(--color-ink-dim)">{summary}</p>
-  <ul class="flex flex-wrap gap-2">
+  <ul class="mt-auto flex flex-wrap gap-2">
     {
       tags.map((tag) => (
-        <li class="rounded-full border border-(--color-line) px-2.5 py-0.5 font-mono text-xs text-(--color-ink-dim)">
+        <li class="gold-border rounded-full px-2.5 py-0.5 font-mono text-xs text-(--color-ink-dim)">
           {tag}
         </li>
       ))

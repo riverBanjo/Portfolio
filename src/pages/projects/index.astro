@@ -2,22 +2,37 @@
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
+import { sortProjects } from "../../lib/projects";
 
-const allProjects = (await getCollection("projects")).sort(
-  (a, b) => b.data.year - a.data.year,
-);
+const all = sortProjects(await getCollection("projects"));
+const featured = all.filter((p) => p.data.featured);
+const other = all.filter((p) => !p.data.featured);
 ---
 
-<Layout title="Projects" description="Projects by River Fisher.">
+<Layout title="Projects" description="Things River Fisher has built and shipped.">
   <section class="mx-auto max-w-3xl px-6 pt-16 pb-24">
     <h1 class="mb-2 text-3xl font-medium tracking-tight text-(--color-ink)">
       Projects
     </h1>
-    <p class="mb-10 text-(--color-ink-dim)">
-      Everything I've built and want to talk about.
+    <p class="mb-10 max-w-xl text-(--color-ink-dim)">
+      Things I've built and shipped. Each write-up says whether it was solo,
+      team or client work, and what part was mine.
     </p>
     <div class="grid gap-4 sm:grid-cols-2">
-      {allProjects.map((project) => <ProjectCard project={project} />)}
+      {featured.map((project) => <ProjectCard project={project} />)}
     </div>
+
+    {
+      other.length > 0 && (
+        <>
+          <h2 class="mt-16 mb-6 font-mono text-sm tracking-wide text-(--color-ink-dim) uppercase">
+            More work
+          </h2>
+          <div class="grid gap-4 sm:grid-cols-2">
+            {other.map((project) => <ProjectCard project={project} />)}
+          </div>
+        </>
+      )
+    }
   </section>
 </Layout>

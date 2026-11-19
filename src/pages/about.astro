@@ -1,44 +1,127 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
+const timeline = [
+  {
+    when: "2026",
+    what: "The World Was Young — Online",
+    detail:
+      "Full-stack on a live, real-time multiplayer worldbuilding game with a small team. Auth, Postgres, accounts, edge infrastructure, and a lot of race conditions.",
+  },
+  {
+    when: "4 years",
+    what: "Developer, Groundworks",
+    detail:
+      "Hired to build custom Gutenberg blocks in React for jeswork.com. Most recently, helped move the site from WordPress to Next.js and migrated its analytics to Cloudflare Zaraz.",
+  },
+  {
+    when: "2022 – now",
+    what: "Freelance developer, Magnify Marketing Agency",
+    detail:
+      "Custom WordPress and WooCommerce plugins for client stores: checkout features, subscription order flows, the fixes that come in on a Monday.",
+  },
+  {
+    when: "2021 – 2022",
+    what: "Teaching myself the web",
+    detail:
+      "The Odin Project, then WordPress themes, Gutenberg blocks in React, and Laravel. Lots of small projects, most of them still on my GitHub.",
+  },
+  {
+    when: "2020",
+    what: "Internship, Cougartech",
+    detail: "Built the repair shop's website. My first code someone else relied on.",
+  },
+];
+
 const skills = [
-  "TypeScript",
-  "React",
-  "Astro",
-  "Node.js",
-  "Python",
-  "UI Design",
+  {
+    group: "Work in daily",
+    items: ["TypeScript", "React", "Node", "PostgreSQL", "Git & code review"],
+  },
+  {
+    group: "Shipped with",
+    items: [
+      "Next.js",
+      "Tailwind",
+      "Drizzle",
+      "Socket.IO",
+      "Better Auth",
+      "Cloudflare Workers",
+      "Playwright",
+      "WordPress & Gutenberg blocks",
+    ],
+  },
+  {
+    group: "Learning / for fun",
+    items: ["Supabase", "Rust", "Godot", "Unity / C#"],
+  },
 ];
 ---
 
-<Layout title="About" description="About River Fisher.">
+<Layout title="About" description="About River Fisher — self-taught product engineer.">
   <section class="mx-auto max-w-3xl px-6 pt-16 pb-24">
     <h1 class="mb-6 text-3xl font-medium tracking-tight text-(--color-ink)">
       About
     </h1>
     <div class="max-w-xl space-y-4 text-(--color-ink-dim)">
       <p>
-        Replace this with your actual bio — who you are, what you work on,
-        and what kind of problems you like solving. A couple of short
-        paragraphs is plenty.
+        I'm River, a self-taught developer. I started with The Odin Project
+        and WordPress themes, and got hooked the first time something I built
+        was used by people I'd never met.
       </p>
       <p>
-        You can also mention your background, how you got into this work,
-        and what you're focused on right now.
+        Since then I've spent four years at Groundworks. I was hired to build
+        custom React blocks for the WordPress editor, and most recently helped
+        move that production site from WordPress to Next.js. I've
+        also shipped client plugins for live WooCommerce stores, and spent
+        most of this year on a
+        real-time multiplayer worldbuilding game, going from "runs on our
+        laptops" to accounts, Postgres and an alpha at Gen Con.
+      </p>
+      <p>
+        Outside work I make games, mostly in Godot. I love tools that help
+        people build worlds and tell stories in them, and I'm looking for a
+        small team where I can ship every day and get properly good, fast.
       </p>
     </div>
 
-    <h2 class="mt-12 mb-4 font-mono text-sm text-(--color-ink-dim) uppercase tracking-wide">
-      Skills
+    <h2 class="mt-14 mb-6 font-mono text-sm tracking-wide text-(--color-ink-dim) uppercase">
+      Path so far
     </h2>
-    <ul class="flex flex-wrap gap-2">
+    <ol class="space-y-6 gold-rule-l pl-6">
       {
-        skills.map((skill) => (
-          <li class="rounded-full border border-(--color-line) px-3 py-1 font-mono text-xs text-(--color-ink-dim)">
-            {skill}
+        timeline.map((t) => (
+          <li class="relative">
+            <span
+              class="absolute top-1.5 left-[calc(-1.5rem_-_var(--gold-line)/2_-_5px)] gold-fill size-2.5 rounded-full"
+              aria-hidden="true"
+            />
+            <p class="font-mono text-xs text-(--color-ink-dim)">{t.when}</p>
+            <p class="font-medium text-(--color-ink)">{t.what}</p>
+            <p class="max-w-xl text-sm text-(--color-ink-dim)">{t.detail}</p>
           </li>
         ))
       }
-    </ul>
+    </ol>
+
+    <h2 class="mt-14 mb-6 font-mono text-sm tracking-wide text-(--color-ink-dim) uppercase">
+      Tools
+    </h2>
+    <div class="space-y-5">
+      {
+        skills.map((s) => (
+          <div>
+            <h3 class="mb-2 text-sm text-(--color-ink)">{s.group}</h3>
+            <ul class="flex flex-wrap gap-2">
+              {s.items.map((item) => (
+                <li class="gold-border rounded-full px-3 py-1 font-mono text-xs text-(--color-ink-dim)">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
   </section>
 </Layout>

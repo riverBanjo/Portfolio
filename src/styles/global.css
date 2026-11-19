@@ -5,17 +5,68 @@
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", monospace;
 
-  --color-bg: #0a0a0c;
-  --color-bg-raised: #131317;
-  --color-ink: #f2f2f0;
-  --color-ink-dim: #9a9aa2;
-  --color-line: #232329;
-  --color-accent: #7dffb3;
-  --color-accent-dim: #4fae7f;
+  /* Palette */
+  --color-blush: #fff5f5;
+  --color-petal: #f7d6d0;
+  --color-rose: #e2b4bd;
+  --color-graphite: #4a4a4a;
+
+  /* Semantic tokens */
+  --color-bg: var(--color-blush);
+  --color-bg-raised: #ffffff;
+  --color-ink: var(--color-graphite);
+  --color-ink-dim: #5f5557; /* warm grey, 6.7:1 on blush */
+  /* Petal (#F7D6D0) is only 1.3:1 on blush, so it can't define edges.
+     Rose draws dividers and card edges; a deeper rose marks interactive edges. */
+  --color-line: var(--color-rose);
+  --color-line-strong: #b98a93; /* 2.8:1 on blush, for button outlines */
+  /* #E2B4BD is too light for text, so text accents use a deep rose (6.8:1). */
+  --color-accent: #874055;
+  --color-accent-dim: var(--color-line-strong);
+
+  /* Gold: deep enough at the dark stops to hold up on a light background */
+  --color-gold-deep: #7a5a14;
+  --color-gold: #b8913a;
+  --color-gold-light: #f6e3a1;
+}
+
+:root {
+  /* Metallic banding, like light moving over a curved gold surface.
+     Two versions, because a gold that reads on blush disappears on graphite
+     and vice versa. */
+
+  /* For light backgrounds: antique gold, mostly 4–7:1 on blush, with a brief
+     highlight band for the shine. */
+  --gold-metal: linear-gradient(
+    105deg,
+    #6b4e10 0%,
+    #94701f 20%,
+    #c9a24a 34%,
+    #7a5a14 50%,
+    #94701f 66%,
+    #d4af5a 80%,
+    #6b4e10 100%
+  );
+  /* For dark (graphite) backgrounds: bright gold leaf, every stop 5.4:1 or
+     higher on #4A4A4A. */
+  --gold-metal-bright: linear-gradient(
+    105deg,
+    #e6c878 0%,
+    #f6e3a1 22%,
+    #fff1c1 34%,
+    #e6c878 50%,
+    #f0d68a 68%,
+    #fff6d6 82%,
+    #e6c878 100%
+  );
+  /* Thickness of every gold outline and hairline. */
+  --gold-line: 2px;
+  /* Fine grain so the gold reads as a material, not a flat gradient. */
+  --gold-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.05 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -25,10 +76,179 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-accent);
-  color: var(--color-bg);
+  background-color: var(--color-petal);
+  color: var(--color-graphite);
 }
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+/* ---------- Gold texture utilities ---------- */
+
+/* Gold foil text. Best on display-size text or small decorative glyphs. */
+.gold-text {
+  background-image: var(--gold-metal);
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 1.2s ease;
+}
+
+/* Bright gold foil text, for use on graphite. */
+.gold-text-bright {
+  background-image: var(--gold-metal-bright);
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 1.2s ease;
+}
+
+/* Graphite button with a gold foil label and a fine gold edge. */
+.btn-gold {
+  --gold-border-bg: var(--color-graphite);
+  box-shadow: 0 1px 2px rgb(74 74 74 / 0.25);
+}
+
+/* Gold leaf surface (buttons, dots, rules). */
+.gold-fill {
+  background-image: var(--gold-grain), var(--gold-metal);
+  background-size: 160px 160px, 200% 100%;
+  background-position: 0 0, 0% 50%;
+  background-blend-mode: multiply, normal;
+  box-shadow:
+    inset 0 1px 0 rgb(255 248 220 / 0.7),
+    inset 0 -1px 0 rgb(90 64 10 / 0.35);
+  transition: background-position 1.2s ease;
+}
+
+/* Thin gold edge around any element, rounded corners included. The fill
+   inside comes from --gold-border-bg (defaults to the page background), and
+   children inherit it, so pills inside a white card stay white. */
+.gold-border {
+  border: var(--gold-line) solid transparent;
+  background:
+    linear-gradient(var(--gold-border-bg, var(--color-bg)), var(--gold-border-bg, var(--color-bg))) padding-box,
+    var(--gold-metal) border-box;
+  background-size: 100% 100%, 200% 100%;
+  background-position: 0 0, 0% 50%;
+  transition: background-position 1.2s ease, box-shadow 0.3s ease;
+}
+
+/* Straight gold hairlines (square ends, so border-image is fine here). */
+.gold-rule-t,
+.gold-rule-b,
+.gold-rule-l,
+.gold-rule-y {
+  border-style: solid;
+  border-width: 0;
+  border-image: var(--gold-metal) 1;
+}
+.gold-rule-t { border-top-width: var(--gold-line); }
+.gold-rule-b { border-bottom-width: var(--gold-line); }
+.gold-rule-l { border-left-width: var(--gold-line); }
+.gold-rule-y { border-top-width: var(--gold-line); border-bottom-width: var(--gold-line); }
+
+/* Light glides across the metal on hover. */
+@media (prefers-reduced-motion: no-preference) {
+  .gold-text:hover,
+  .group:hover .gold-text,
+  .gold-fill:hover,
+  .group:hover .gold-fill {
+    background-position: 0 0, 100% 50%;
+  }
+  .gold-text:hover,
+  .group:hover .gold-text,
+  .gold-text-bright:hover,
+  .group:hover .gold-text-bright {
+    background-position: 100% 50%;
+  }
+  .gold-border:hover,
+  .group:hover.gold-border {
+    background-position: 0 0, 100% 50%;
+  }
+}
+
+/* ---------- Sparkle ---------- */
+
+/* Two four-point star glints that twinkle at opposite corners of an element.
+   The two durations differ so the pair never falls into a fixed rhythm;
+   --sparkle-delay offsets one element from the next. Purely decorative. */
+:root {
+  --sparkle-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23fffbe8'/%3E%3Cstop offset='.45' stop-color='%23f6e3a1'/%3E%3Cstop offset='1' stop-color='%23b8913a'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M12 0C12.8 7.5 16.5 11.2 24 12C16.5 12.8 12.8 16.5 12 24C11.2 16.5 7.5 12.8 0 12C7.5 11.2 11.2 7.5 12 0Z' fill='url(%23g)'/%3E%3C/svg%3E");
+}
+
+.sparkle {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sparkle::before,
+  .sparkle::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    background: var(--sparkle-star) center / contain no-repeat;
+    /* A deep-gold halo keeps the pale star visible against blush. */
+    filter: drop-shadow(0 0 1.5px rgb(122 90 20 / 0.55));
+    opacity: 0;
+    transform: scale(0.2);
+    animation: sparkle-twinkle 5.3s ease-in-out infinite;
+    animation-delay: var(--sparkle-delay, 0s);
+  }
+
+  .sparkle::before {
+    width: 14px;
+    height: 14px;
+    top: -7px;
+    right: -7px;
+  }
+
+  .sparkle::after {
+    width: 9px;
+    height: 9px;
+    bottom: -4.5px;
+    left: 14%;
+    animation-duration: 7.1s;
+    animation-delay: calc(var(--sparkle-delay, 0s) + 2.4s);
+  }
+
+  /* Small variant for tiny targets like the logo dot: one glint only. */
+  .sparkle-sm::before {
+    width: 9px;
+    height: 9px;
+    top: -5px;
+    right: -6px;
+  }
+  .sparkle-sm::after {
+    display: none;
+  }
+}
+
+@keyframes sparkle-twinkle {
+  0%,
+  72%,
+  100% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1) rotate(45deg);
+  }
+  88% {
+    opacity: 0.7;
+    transform: scale(0.55) rotate(70deg);
+  }
+  94% {
+    opacity: 0;
+    transform: scale(0.2) rotate(90deg);
+  }
 }

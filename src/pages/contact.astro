@@ -1,10 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
-const links = [
-  { href: "https://github.com/", label: "GitHub" },
-  { href: "https://linkedin.com/", label: "LinkedIn" },
-];
+import { socials } from "../data/site";
 ---
 
 <Layout title="Contact" description="Get in touch with River Fisher.">
@@ -13,12 +9,13 @@ const links = [
       Contact
     </h1>
     <p class="mb-8 max-w-xl text-(--color-ink-dim)">
-      The best way to reach me is through the links below.
+      I'm looking for an engineering role on a team that
+      ships. If that's you, I'd love to talk.
     </p>
 
     <ul class="flex gap-6 font-mono text-sm">
       {
-        links.map((link) => (
+        socials.map((link) => (
           <li>
             <a
               href={link.href}
@@ -26,7 +23,7 @@ const links = [
               rel="noreferrer"
               class="text-(--color-ink-dim) transition-colors hover:text-(--color-accent)"
             >
-              {link.label}
+              {link.label} &nearr;
             </a>
           </li>
         ))
