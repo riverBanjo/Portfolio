@@ -4,7 +4,7 @@ summary: "Hired to build custom React Gutenberg blocks for JES Foundation Repair
 tags: ["Next.js", "React", "WordPress / Gutenberg", "TypeScript", "Cloudflare Zaraz", "Playwright"]
 year: 2026
 role: "Developer"
-context: "Groundworks · 4 years on the team"
+context: "Groundworks · Oct 2022 – Oct 2026"
 status: "Production"
 link: "https://jeswork.com"
 featured: true
